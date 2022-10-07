@@ -30,5 +30,5 @@ python train.py --batch_size 2000 --epoch 2000 --latch_epoch 50 --dataset 'cifar
 ## How to Start Evaluation
 Here is an example.
 ```bash
-python evaluate_forward.py --path "./log/data[mnist]_fdim[128]_ncomps[20]_epoch[2000]_batch[1000]_lr[0.001]_seed[77]/checkpoints/model_epoch1998.pth" --batch_size 1000
+python evaluate_forward.py --path "./log/data[mnist]_fdim[128]_ncomps[20]_epoch[2000]_batch[1000]_lr[0.001]_seed[77]/checkpoints/model_epoch1999.pth" --batch_size 1000
 ```
