@@ -11,7 +11,7 @@ In latching, the dictionary $\Gamma$ and its sparse coding $A$ are initialized f
 
 Then at each epoch in the training stage, I compute $Z_{\theta}Diag(\Pi_j)Z_{\theta}^{T}$ in each batch and force its nuclear norm to be 1, then update $\Gamma$, $A$, and $\theta$ (where $\theta$ denotes the trainable weights of model), just as what the V-MCR${}^2$ algorithm tells in paper. 
 
-This operation is important, because we wish $\Gamma Diag(A_j)\Gamma^T=Z_{\theta}Diag(\Pi_j)Z_{\theta}^{T}$. However these two parts are computed at different stage and different scale (computed using the whole training data or computed using a batch of the training data). If the scale is not regularized, empirically the training would fail.
+This operation is important, because we wish $\Gamma Diag(A_j)\Gamma^T = Z_{\theta}Diag(\Pi_j)Z_{\theta}^{T}$. However these two parts are computed at different stage and different scale (computed using the whole training data or computed using a batch of the training data). If the scale is not regularized, empirically the training would fail.
 
 However the update of $A$ might break the constraint, because the original algorithm doesn't regularize its scale, unlike what $\Gamma$ is treated. The ideal way to regularize the scale of $A$ is to set $\| A_j \|_{1}=1$, but in practice it results in slow convergence. Using $\| A_j \|_{2}=1$ or even $\| A_j \|_{3}=1$ instead would unexpectedly have a faster convergence, and finally get a quite good accuracy.
 
