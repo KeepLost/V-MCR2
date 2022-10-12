@@ -20,6 +20,8 @@ def parse_args():
     parser.add_argument('--learning_rate',type=float,default=1e-3,help='learning rate of the model')
     parser.add_argument('--log_dir',type=str,default="./log",help='directory for logs')
     parser.add_argument('--metric_mcr2',default=False, action='store_true',help="get the learning curve via mcr2 metric")
+    parser.add_argument('--nu_A',type=float,default=2.0,help='nu_A in dictionary update')
+    parser.add_argument('--nu_Gamma',type=float,default=5.0,help='nu_Gamma in dictionary update')
     parser.add_argument('--seed',type=int,default=77,help='Random Seed')
     args = parser.parse_args()
     return args
@@ -66,6 +68,8 @@ def run_vmcr2(args):
                               True,
                               opt,
                               args.learning_rate,
+                              nu_Gamma=args.nu_Gamma,
+                              nu_A=args.nu_A,
                               previous_history=pre_history,
                               mcr2_metric=args.metric_mcr2,
                               batch_size=args.batch_size,

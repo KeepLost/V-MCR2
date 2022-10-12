@@ -285,8 +285,8 @@ def epoch_updater_scaled(dataloader:DataLoader,
                          device:Union[torch.device,str]='cpu',
                          epsilon:float=0.5,
                          mu:float=1.0,
-                         nu_Gamma:float=5.0,
-                         nu_A:float=5.0,
+                         nu_Gamma:float=1.0,
+                         nu_A:float=0.01,
                          verbose:bool=True,
                          start_scale:bool=False,
                          current_progress:float=0.0,
@@ -387,7 +387,7 @@ def vmcr2_batch_train(trainloader,
                       optimizer=None,
                       nu_theta=1e-3,
                       nu_Gamma=5.0,
-                      nu_A=5.0,
+                      nu_A=2.0,
                       mu=1.0,
                       epsilon=0.5,
                       previous_history=None,
@@ -397,10 +397,11 @@ def vmcr2_batch_train(trainloader,
                       save_func=None,
                       save_epoch=100,
                       save_path=None,
-                      warmup_persentage=1.0/20,
+                      warmup_persentage=1.0/40,
                       change_equ_lr=False,
                       accelerate_persentage=1.0/2,
-                      pAswitch_persentage=3.0/5):
+                      pAswitch_persentage=1.0/10,
+                      stage_A=4,stage_Gam=4):
     if optimizer is None: # if optimizer is not specified, then assign SGD
         if isinstance(featurizer,torch.nn.DataParallel):
             params=featurizer.module.parameters()
@@ -438,9 +439,13 @@ def vmcr2_batch_train(trainloader,
                 p_A_switch=p_A_progress
             start_scale=(current_epoch>=(num_epoch*warmup_persentage)) and change_equ_lr
             scale_progress=(current_epoch-num_epoch*warmup_persentage)/num_epoch
+            ratio_A=current_epoch*stage_A//num_epoch
+            ratio_Gam=current_epoch*stage_Gam//num_epoch
+            nu_A_scaled=nu_A*(0.8**ratio_A)
+            nu_Gamma_scaled=nu_Gamma*(0.8**ratio_Gam)
             featurizer,Gamma,A,expand,compress,reg,reg_again,value=epoch_updater_scaled(
                 trainloader,featurizer,optimizer,Gamma,A,
-                num_classes,device,epsilon_scaled,mu,nu_Gamma,nu_A,
+                num_classes,device,epsilon_scaled,mu,nu_Gamma_scaled,nu_A_scaled,
                 verbose_train,start_scale,scale_progress,accelerate_persentage,p_A_switch,p_A_progress)
             record={"v-mcr2":{"expand":expand,"compress":compress,"equ_reg":reg,"loss_value":value,"equ_reg_again":reg_again}}
             func_print("Epoch {}/{}: expand={:.2f}, compress={:.2f}, equ_reg={:.2f}, loss_value={:.2f}, equ_reg_again={:.2f}".format(
