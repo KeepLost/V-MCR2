@@ -36,4 +36,4 @@ python evaluate_forward.py --path "./log/data[mnist]_fdim[128]_ncomps[20]_epoch[
 ```
 
 ## Compared with the Original Paper
-I ran my codes on mnist and cifar10 datasets, and found that the accuracies are a bit lower than those in *Table 2* of the original paper (mnist: 0.937, cifar10: 0.832). If the evaluation method is changed to SVM, then these two numbers could be 0.1~0.3 higher. I tried many ways but results are almost the same, sometimes even worse.
+I ran my codes on mnist and cifar10 datasets, and found that the accuracies are a bit lower than those in *Table 2* of the original paper (mnist: 0.937, cifar10: 0.832). If the evaluation method is changed to SVM, then these two numbers could be 0.01~0.03 higher. I tried many ways but results are almost the same, sometimes even worse.
